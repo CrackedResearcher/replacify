@@ -21,7 +21,7 @@ export default function LandingPage() {
           instantly tells you how replaceable you are
         </h1>
 
-        <p className="text-lg font-sans sm:text-xl md:text-xl text-gray-300 max-w-2xl mx-auto leading-relaxed animate-slide-up px-4">
+        <p className="text-lg font-sans sm:text-lg md:text-xl text-gray-300 max-w-2xl mx-auto leading-relaxed animate-slide-up px-4">
           just upload your resume + skills and get brutally honest ai feedback
           on how soon a machine might take your job
         </p>
