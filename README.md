@@ -20,7 +20,7 @@ because ai is coming for everything — and we thought it’d be fun to tell you
 - optionally add any extra skills
 - we parse it, process it, then ask a few smart models how likely it is you’ll be replaced by ai
 - we show you:
-  - your ai-replaceability score (0–100%)
+  - your ai replaceability score (0–100%)
   - how confident we are in it
   - some brutally honest commentary
 
