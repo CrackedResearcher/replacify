@@ -14,6 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://replacify.vercel.app"),
   title: "Thats Replacify",
   description:
     "because AI is coming for everything — and we thought it’d be fun to tell you if your job is next.",
