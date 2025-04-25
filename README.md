@@ -28,3 +28,8 @@ because ai is coming for everything — and we thought it’d be fun to tell you
 
 [crackedresearcher](https://github.com/CrackedResearcher)
 for the culture. and the chaos.
+
+hmm you asked this?
+
+<img width="1440" alt="Screenshot 2025-04-25 at 7 55 35 PM" src="https://github.com/user-attachments/assets/239dffe0-fb30-4281-8da7-5631c707f8ca" />
+
