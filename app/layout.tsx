@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { Toaster } from "@/components/ui/sonner"
+import { Toaster } from "@/components/ui/sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -15,7 +15,29 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Thats Replacify",
-  description: "because ai is coming for everything — and we thought it’d be fun to tell you if your job is next.",
+  description:
+    "because AI is coming for everything — and we thought it’d be fun to tell you if your job is next.",
+  openGraph: {
+    title: "Thats Replacify",
+    description:
+      "because AI is coming for everything — and we thought it’d be fun to tell you if your job is next.",
+    images: [
+      {
+        url: "/opengraph.png",
+        width: 1200,
+        height: 630,
+        alt: "Replacify AI Job Predictions",
+      },
+    ],
+    siteName: "Replacify",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Thats Replacify",
+    description:
+      "because AI is coming for everything — and we thought it’d be fun to tell you if your job is next.",
+    images: ["/opengraph.png"],
+  },
 };
 
 export default function RootLayout({
@@ -29,7 +51,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         {children}
-        <Toaster />
+        <Toaster  />
       </body>
     </html>
   );

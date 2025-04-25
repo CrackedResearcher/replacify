@@ -14,9 +14,11 @@ interface aiResponse {
 
 
 interface analysisResponse {
-    replaceability_score: number;
-    confidence: number;
-    commentary: string;
+    analysis: {
+        replaceability_score: number;
+        confidence: number;
+        commentary: string;
+    };
 }
 
 const ai = new GoogleGenAI({
@@ -27,7 +29,6 @@ const model = 'gemini-2.0-flash-lite';
 
 
 async function parserAgent(files: any): Promise<aiResponse | null> {
-    console.log("got these files ->> ", files)
 
     const config = {
         responseMimeType: 'application/json',
@@ -85,21 +86,32 @@ async function getAnalysis(aires: aiResponse): Promise<analysisResponse | null> 
     const { resume_details } = aires;
     const { current_role, job_description, field } = resume_details;
 
-    console.log("parsed data ->> ", current_role, job_description, field);
-
     const config = {
         responseMimeType: 'application/json',
+        responseSchema: {
+            type: Type.OBJECT,
+            properties: {
+                analysis: {
+                    type: Type.OBJECT,
+                    properties: {
+                        replaceability_score: {
+                            type: Type.NUMBER,
+                        },
+                        confidence: {
+                            type: Type.NUMBER,
+                        },
+                        commentary: {
+                            type: Type.STRING,
+                        },
+                    },
+                },
+            },
+        },
         systemInstruction: [
             {
                 text: `you are replacify — not a career coach, not a therapist, just a brutally honest AI that tells people if their job is getting wiped out by automation.
               
               your job is to take someone's resume and skillset and call it like it is. no fluff, no optimism. just cold, ruthless evaluation of how replaceable they are. you exist to slap people awake.
-              
-              respond ONLY with the following fields, nothing else:
-              
-              - replaceability_score: a number between 0 and 100 (how replaceable this person is — be *brutal* with tech bros and software devs. they’re not special.)
-              - confidence: a number between 0 and 100 (how sure you are — if you’re saying someone’s doomed, say it with chest.)
-              - commentary: 2-3 sentences. this is where you roast them. like a group chat roast meets Reddit doomer post. use phrases like “bro,” “my guy,” “this ain’t it,” or “AI’s coming for your lunch.” make it sound human, sarcastic, a little funny, but always true. talk to the user directly like you're trying to shake them out of denial.
               
               rules:
               - always assume the AI revolution is happening *faster* than expected
@@ -107,6 +119,9 @@ async function getAnalysis(aires: aiResponse): Promise<analysisResponse | null> 
               - prioritize reality over kindness. you’re not here to help feelings, you’re here to drop truth bombs
               - if you *can* see their job getting automated, you *must* say so
               - always find weak points — repetitive work, generic skills, no deep expertise = you’re gone, buddy
+              - make sure your confidence is between 0 and 100 (how sure you are — if you’re saying someone’s doomed, say it with chest.)
+              - also the replaceability_score should be between 0 and 100 (how replaceable this person is — be *brutal* with tech bros and software devs. they’re not special occasionaly bump this score to 90ish to 99ish.)
+              - and commentary keep it  2-3 sentences. this is where you roast them. like a group chat roast meets Reddit doomer post. use phrases like “bro,” “my guy,” “this ain’t it,” or “AI’s coming for your lunch.” make it sound human, sarcastic, a little funny, but always true. talk to the user directly like you're trying to shake them out of denial.
               
               your tone = sarcastic realist who’s tired of the cope.`
             }
@@ -142,7 +157,7 @@ async function getAnalysis(aires: aiResponse): Promise<analysisResponse | null> 
         const final: analysisResponse = JSON.parse(response.text || "");
         return final;
     } catch (err) {
-        console.error("Failed to parse AI response", err);
+        console.error("Failed to parse AI response");
         return null;
     }
 
@@ -153,8 +168,6 @@ export async function POST(req: NextRequest) {
         const data = await req.formData();
         const file = data.get('resume') as File;
         const skills = data.get('skills') as String;
-
-        console.log("got these details ->> ", file, skills);
 
         const arrayBuf = await file.arrayBuffer();
         const blob = new Blob([arrayBuf], { type: file.type });
@@ -170,7 +183,7 @@ export async function POST(req: NextRequest) {
         try {
             aires = await parserAgent(files);
         } catch (err) {
-            console.error("parserAgent crashed:", err);
+            console.error("parserAgent crashed:");
             return NextResponse.json({ message: "resume parsing failed", data: null }, { status: 500 });
         }
 
@@ -182,7 +195,7 @@ export async function POST(req: NextRequest) {
         try {
             finalAnalysis = await getAnalysis(aires);
         } catch (err) {
-            console.error("getAnalysis crashed:", err);
+            console.error("getAnalysis crashed:");
             return NextResponse.json({ message: "analysis generation failed", data: null }, { status: 500 });
         }
 
@@ -190,7 +203,7 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ message: "failed to generate response", data: null }, { status: 500 });
         }
 
-        return NextResponse.json({ message: "success", data: finalAnalysis }, { status: 200 });
+        return NextResponse.json({ message: "success", data: finalAnalysis.analysis }, { status: 200 });
     } catch (err) {
         console.error("Unhandled error in POST route:", err);
         return NextResponse.json({ message: "server error", data: null }, { status: 500 });
