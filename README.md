@@ -8,7 +8,8 @@ just upload your resume + skills and get brutally honest ai feedback on how soon
 
 replacify uses llms to analyze your resume and skillset, then predicts how automatable your role is.
 it gives you a percentage score and some spicy commentary.
-because sometimes, the truth hurts. but at least it's quantified.
+
+because sometimes, the truth hurts. but at least it's quantified. haha
 
 ## why
 
