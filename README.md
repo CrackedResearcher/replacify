@@ -1,6 +1,6 @@
 # replacify 
 
-instantly tells you how replaceable you are.
+instantly tells you how replaceable you are.  
 
 just upload your resume + skills and get brutally honest ai feedback on how soon a machine might take your job.
 
